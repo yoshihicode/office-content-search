@@ -2,6 +2,7 @@
   "name": "office-content-search",
   "displayName": "Office Content Search",
   "version": "0.0.1",
+  "icon": "media/icon.png",
   "publisher": "yoshihicode",
   "repository": {
     "type": "git",
