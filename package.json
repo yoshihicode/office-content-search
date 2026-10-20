@@ -1,0 +1,140 @@
+{
+  "name": "office-content-search",
+  "displayName": "Office Content Search",
+  "version": "0.0.1",
+  "publisher": "yoshihicode",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "main": "./dist/extension.js",
+  "l10n": "./l10n",
+  "contributes": {
+    "commands": [
+      {
+        "command": "officeSearch.searchInFolder",
+        "title": "%command.searchInFolder%",
+        "category": "Office Search"
+      },
+      {
+        "command": "officeSearch.openFile",
+        "title": "%command.openFile%",
+        "category": "Office Search"
+      },
+      {
+        "command": "officeSearch.clearResults",
+        "title": "%command.clearResults%",
+        "category": "Office Search",
+        "icon": "$(clear-all)"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "officeSearch",
+          "title": "%view.container%",
+          "icon": "media/search.svg"
+        }
+      ]
+    },
+    "views": {
+      "officeSearch": [
+        {
+          "type": "webview",
+          "id": "officeSearch.form",
+          "name": "%view.form%"
+        },
+        {
+          "id": "officeSearch.results",
+          "name": "%view.results%"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "officeSearch.results",
+        "contents": "%view.results.welcome%"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "officeSearch.clearResults",
+          "when": "view == officeSearch.results",
+          "group": "navigation@2"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "officeSearch.searchInFolder",
+          "when": "explorerResourceIsFolder",
+          "group": "4_search"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "officeSearch.openFile",
+          "when": "false"
+        },
+        {
+          "command": "officeSearch.searchInFolder",
+          "when": "false"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Office Content Search",
+      "properties": {
+        "officeSearch.includeSubfolders": {
+          "type": "boolean",
+          "default": true,
+          "description": "%config.includeSubfolders%"
+        },
+        "officeSearch.excludeFolders": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            ".git",
+            "node_modules"
+          ],
+          "description": "%config.excludeFolders%"
+        },
+        "officeSearch.maxFileSizeMB": {
+          "type": "number",
+          "default": 50,
+          "minimum": 1,
+          "description": "%config.maxFileSizeMB%"
+        },
+        "officeSearch.maxHitsPerFile": {
+          "type": "number",
+          "default": 200,
+          "minimum": 1,
+          "description": "%config.maxHitsPerFile%"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p .",
+    "bundle": "esbuild src/extension.ts --bundle --platform=node --target=node18 --format=cjs --external:vscode --outfile=dist/extension.js --sourcemap",
+    "build": "npm run compile && npm run bundle",
+    "watch": "npm run bundle -- --watch",
+    "test": "npm run compile && node --test test/*.test.js",
+    "l10n": "vscode-l10n-dev export --outDir ./l10n ./src",
+    "vscode:prepublish": "npm run compile && npm run bundle -- --minify",
+    "package": "vsce package --no-dependencies"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "@types/vscode": "^1.85.0",
+    "@vscode/l10n-dev": "^0.0.35",
+    "@vscode/vsce": "^4.0.0",
+    "esbuild": "^0.28.2",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "fflate": "^0.8.2",
+    "saxes": "^6.0.0"
+  }
+}

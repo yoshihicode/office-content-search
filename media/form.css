@@ -1,0 +1,100 @@
+/* VS Code のテーマの色を CSS 変数で使う（ライト/ダークに自動で合う） */
+body {
+    padding: 8px 12px;
+    color: var(--vscode-foreground);
+    font-family: var(--vscode-font-family);
+    font-size: var(--vscode-font-size);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+label {
+    margin-top: 4px;
+}
+
+label.inline {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 0;
+}
+
+fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+}
+
+legend {
+    padding: 0;
+    margin-bottom: 2px;
+}
+
+.row {
+    display: flex;
+    gap: 6px;
+}
+
+.row input[type="text"] {
+    flex: 1;
+    min-width: 0;
+}
+
+input[type="text"] {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 4px 6px;
+    color: var(--vscode-input-foreground);
+    background: var(--vscode-input-background);
+    border: 1px solid var(--vscode-input-border, transparent);
+    font: inherit;
+}
+
+input[type="text"]:focus {
+    outline: 1px solid var(--vscode-focusBorder);
+    outline-offset: -1px;
+}
+
+button {
+    padding: 4px 12px;
+    color: var(--vscode-button-foreground);
+    background: var(--vscode-button-background);
+    border: none;
+    cursor: pointer;
+    font: inherit;
+}
+
+button:hover {
+    background: var(--vscode-button-hoverBackground);
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+button.secondary {
+    color: var(--vscode-button-secondaryForeground);
+    background: var(--vscode-button-secondaryBackground);
+}
+
+button.secondary:hover {
+    background: var(--vscode-button-secondaryHoverBackground);
+}
+
+.row button[type="submit"] {
+    flex: 1;
+}
+
+.error {
+    color: var(--vscode-errorForeground);
+    margin: 0;
+    min-height: 1em;
+}

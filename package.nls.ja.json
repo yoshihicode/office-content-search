@@ -1,0 +1,13 @@
+{
+  "command.searchInFolder": "このフォルダの Office ファイルを検索",
+  "command.openFile": "ファイルを開く",
+  "command.clearResults": "結果をクリア",
+  "view.container": "Office 検索",
+  "view.form": "検索",
+  "view.results": "検索結果",
+  "view.results.welcome": "検索結果はここに表示されます。\n[検索フォームを開く](command:officeSearch.form.focus)",
+  "config.includeSubfolders": "既定でサブフォルダも検索します。",
+  "config.excludeFolders": "サブフォルダを検索するときに除外するフォルダ名。",
+  "config.maxFileSizeMB": "このサイズ（MB）を超えるファイルはスキップします。",
+  "config.maxHitsPerFile": "1ファイルあたりのヒット数の上限。"
+}
