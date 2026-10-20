@@ -3,6 +3,14 @@
   "displayName": "Office Content Search",
   "version": "0.0.1",
   "publisher": "yoshihicode",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yoshihicode/office-content-search.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yoshihicode/office-content-search/issues"
+  },
+  "homepage": "https://github.com/yoshihicode/office-content-search",
   "engines": {
     "vscode": "^1.85.0"
   },
