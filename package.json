@@ -18,6 +18,20 @@
   "main": "./dist/extension.js",
   "l10n": "./l10n",
   "contributes": {
+    "keybindings": [
+      {
+        "command": "officeSearch.copyFileName",
+        "key": "ctrl+c",
+        "mac": "cmd+c",
+        "when": "focusedView == officeSearch.results"
+      },
+      {
+        "command": "officeSearch.copyPath",
+        "key": "ctrl+alt+c",
+        "mac": "cmd+alt+c",
+        "when": "focusedView == officeSearch.results"
+      }
+    ],
     "commands": [
       {
         "command": "officeSearch.searchInFolder",
@@ -34,6 +48,23 @@
         "title": "%command.clearResults%",
         "category": "Office Search",
         "icon": "$(clear-all)"
+      },
+      {
+        "command": "officeSearch.copyFileName",
+        "title": "%command.copyFileName%",
+        "category": "Office Search",
+        "icon": "$(copy)"
+      },
+      {
+        "command": "officeSearch.copyPath",
+        "title": "%command.copyPath%",
+        "category": "Office Search"
+      },
+      {
+        "command": "officeSearch.openAsText",
+        "title": "%command.openAsText%",
+        "category": "Office Search",
+        "icon": "$(output)"
       }
     ],
     "viewsContainers": {
@@ -67,6 +98,11 @@
     "menus": {
       "view/title": [
         {
+          "command": "officeSearch.openAsText",
+          "when": "view == officeSearch.results",
+          "group": "navigation@1"
+        },
+        {
           "command": "officeSearch.clearResults",
           "when": "view == officeSearch.results",
           "group": "navigation@2"
@@ -87,6 +123,31 @@
         {
           "command": "officeSearch.searchInFolder",
           "when": "false"
+        },
+        {
+          "command": "officeSearch.copyFileName",
+          "when": "false"
+        },
+        {
+          "command": "officeSearch.copyPath",
+          "when": "false"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "officeSearch.copyFileName",
+          "when": "view == officeSearch.results && viewItem == officeSearch.file",
+          "group": "inline"
+        },
+        {
+          "command": "officeSearch.copyFileName",
+          "when": "view == officeSearch.results && viewItem =~ /^officeSearch\\.(file|hit|skip)$/",
+          "group": "1_copy@1"
+        },
+        {
+          "command": "officeSearch.copyPath",
+          "when": "view == officeSearch.results && viewItem =~ /^officeSearch\\.(file|hit|skip)$/",
+          "group": "1_copy@2"
         }
       ]
     },
@@ -131,6 +192,7 @@
     "watch": "npm run bundle -- --watch",
     "test": "npm run compile && node --test test/*.test.js",
     "l10n": "vscode-l10n-dev export --outDir ./l10n ./src",
+    "check-l10n": "npm run l10n && node scripts/check-l10n.js",
     "vscode:prepublish": "npm run compile && npm run bundle -- --minify",
     "package": "vsce package --no-dependencies"
   },

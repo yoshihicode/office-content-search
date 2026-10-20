@@ -10,6 +10,7 @@
     const error = document.getElementById('error');
     const searchButton = document.getElementById('search');
     const cancelButton = document.getElementById('cancel');
+    const outputText = document.getElementById('outputText');
 
     const selectedMode = () => document.querySelector('input[name="mode"]:checked').value;
 
@@ -20,6 +21,7 @@
             folder: folder.value,
             recursive: recursive.checked,
             mode: selectedMode(),
+            outputText: outputText.checked,
         });
     }
     const state = vscode.getState();
@@ -27,6 +29,7 @@
         query.value = state.query ?? '';
         folder.value = state.folder ?? '';
         recursive.checked = state.recursive ?? true;
+        outputText.checked = state.outputText ?? false;
         const radio = document.querySelector(`input[name="mode"][value="${state.mode}"]`);
         if (radio) radio.checked = true;
     }
@@ -43,6 +46,7 @@
             mode: selectedMode(),
             folder: folder.value.trim(),
             recursive: recursive.checked,
+            outputText: outputText.checked,
         });
     });
     document.getElementById('browse').addEventListener('click', () => vscode.postMessage({ type: 'browse' }));

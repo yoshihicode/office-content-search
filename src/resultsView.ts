@@ -10,7 +10,7 @@ export interface Skipped {
 }
 
 /** ツリーの1行 */
-type Node =
+export type Node =
     | { type: 'file'; file: FileResult }
     | { type: 'hit'; file: FileResult; hit: Hit }
     | { type: 'more'; file: FileResult } // ヒット数の上限で省略したことを知らせる行
@@ -46,6 +46,27 @@ export class ResultsProvider implements vscode.TreeDataProvider<Node> {
         return this.results.length;
     }
 
+    get allResults(): readonly FileResult[] {
+        return this.results;
+    }
+
+    get allSkipped(): readonly Skipped[] {
+        return this.skipped;
+    }
+
+    static pathOf(node: Node): string | undefined {
+        switch (node.type) {
+            case 'file':
+            case 'hit':
+            case 'more':
+                return node.file.path;
+            case 'skip':
+                return node.skipped.path;
+            case 'skipGroup':
+                return undefined;
+        }
+    }
+
     getChildren(node?: Node): Node[] {
         if (node === undefined) {
             const nodes: Node[] = this.results.map((file) => ({ type: 'file', file }));
@@ -69,6 +90,7 @@ export class ResultsProvider implements vscode.TreeDataProvider<Node> {
                 const n = node.file.hits.length;
                 item.description = n === 1 ? vscode.l10n.t('{0} hit', n) : vscode.l10n.t('{0} hits', n);
                 item.tooltip = node.file.path;
+                item.contextValue = 'officeSearch.file';
                 item.command = { command: 'officeSearch.openFile', title: vscode.l10n.t('Open'), arguments: [node.file.path] };
                 return item;
             }
@@ -78,6 +100,7 @@ export class ResultsProvider implements vscode.TreeDataProvider<Node> {
                 const item = new vscode.TreeItem(label, vscode.TreeItemCollapsibleState.None);
                 item.description = node.hit.location;
                 item.tooltip = `${node.hit.location}\n\n${node.hit.text}`;
+                item.contextValue = 'officeSearch.hit';
                 item.command = { command: 'officeSearch.openFile', title: vscode.l10n.t('Open'), arguments: [node.file.path] };
                 return item;
             }
@@ -99,6 +122,7 @@ export class ResultsProvider implements vscode.TreeDataProvider<Node> {
                 const item = new vscode.TreeItem(path.basename(node.skipped.path), vscode.TreeItemCollapsibleState.None);
                 item.description = node.skipped.reason;
                 item.tooltip = `${node.skipped.path}\n${node.skipped.reason}`;
+                item.contextValue = 'officeSearch.skip';
                 return item;
             }
         }

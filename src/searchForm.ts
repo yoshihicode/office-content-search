@@ -9,7 +9,7 @@ type FromWebview =
     | { type: 'ready' }
     | { type: 'browse' }
     | { type: 'cancel' }
-    | { type: 'search'; query: string; mode: MatchMode; folder: string; recursive: boolean };
+    | { type: 'search'; query: string; mode: MatchMode; folder: string; recursive: boolean; outputText: boolean };
 
 /** 拡張機能 → Webview のメッセージ */
 type ToWebview =
@@ -110,7 +110,7 @@ export class SearchFormProvider implements vscode.WebviewViewProvider {
                     return;
                 }
                 const mode: MatchMode = msg.mode === 'all' ? 'all' : 'any';
-                await this.runner.run({ keywords, mode, root: msg.folder, recursive: msg.recursive === true });
+                await this.runner.run({ keywords, mode, root: msg.folder, recursive: msg.recursive === true, outputText: msg.outputText === true, });
                 break;
             }
         }
@@ -154,6 +154,7 @@ export class SearchFormProvider implements vscode.WebviewViewProvider {
     </div>
 
     <label class="inline"><input id="recursive" type="checkbox" checked> ${e(vscode.l10n.t('Include subfolders'))}</label>
+    <label class="inline"><input id="outputText" type="checkbox"> ${e(vscode.l10n.t('Also open the results as text'))}</label>
 
     <p id="error" class="error" role="alert"></p>
 

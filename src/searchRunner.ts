@@ -7,13 +7,15 @@ import { readConfig } from './config';
 import { localizedLabels, skipReasonText } from './i18n';
 import { OfficeFileError } from './core/zip';
 import { ResultsProvider } from './resultsView';
+import { openReport, SearchSummary } from './report';
 
-/** 検索条件（入力方法が QuickPick でもフォームでも、最後はこの形にそろえる） */
+/** 検索条件 */
 export interface SearchParams {
     keywords: string[];
     mode: MatchMode;
     root: string;
     recursive: boolean;
+    outputText?: boolean;
 }
 
 /** 検索の実行と状態を管理する（同時に動く検索は1つだけ） */
@@ -22,6 +24,8 @@ export class SearchRunner {
     private readonly stateEmitter = new vscode.EventEmitter<boolean>();
     /** 検索中かどうかが変わったときに発火する（フォームのボタン表示の切り替えに使う） */
     readonly onDidChangeRunning = this.stateEmitter.event;
+    /** 最後に終わった検索のまとめ（結果ビューの「テキストで開く」ボタンで使う） */
+    lastSummary: SearchSummary | undefined;
 
     constructor(
         private readonly provider: ResultsProvider,
@@ -91,11 +95,24 @@ export class SearchRunner {
             this.view.message = cts.token.isCancellationRequested
                 ? vscode.l10n.t('Cancelled: {0} — {1} of {2} files matched', keywordText, this.provider.fileCount, scanned)
                 : vscode.l10n.t('Done: {0} — {1} of {2} files matched', keywordText, this.provider.fileCount, scanned);
-            if (this.running === cts) {
+            const isLatest = this.running === cts; // 新しい検索に取って代わられていないか
+            if (isLatest) {
+                this.lastSummary = {
+                    params,
+                    scanned,
+                    cancelled: cts.token.isCancellationRequested,
+                    // clear() で配列が作り直されても影響を受けないよう、コピーを持つ
+                    results: [...this.provider.allResults],
+                    skipped: [...this.provider.allSkipped],
+                };
                 this.running = undefined;
                 this.stateEmitter.fire(false);
             }
             cts.dispose();
+        }
+        // 取って代わられた古い検索の結果は出力しない
+        if (params.outputText && this.lastSummary?.params === params) {
+            await openReport(this.lastSummary);
         }
     }
 

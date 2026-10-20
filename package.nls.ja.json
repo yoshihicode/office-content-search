@@ -5,9 +5,12 @@
   "view.container": "Office 検索",
   "view.form": "検索",
   "view.results": "検索結果",
-  "view.results.welcome": "検索結果はここに表示されます。\n[検索フォームを開く](command:officeSearch.form.focus)",
-  "config.includeSubfolders": "既定でサブフォルダも検索します。",
-  "config.excludeFolders": "サブフォルダを検索するときに除外するフォルダ名。",
-  "config.maxFileSizeMB": "このサイズ（MB）を超えるファイルはスキップします。",
-  "config.maxHitsPerFile": "1ファイルあたりのヒット数の上限。"
+  "view.results.welcome": "検索結果はここに表示されます\n[検索フォームを開く](command:officeSearch.form.focus)",
+  "config.includeSubfolders": "既定でサブフォルダも検索します",
+  "config.excludeFolders": "サブフォルダを検索するときに除外するフォルダ名",
+  "config.maxFileSizeMB": "このサイズ（MB）を超えるファイルはスキップします",
+  "config.maxHitsPerFile": "1ファイルあたりのヒット数の上限",
+  "command.copyFileName": "ファイル名をコピー",
+  "command.copyPath": "パスをコピー",
+  "command.openAsText": "結果をテキストで開く"
 }

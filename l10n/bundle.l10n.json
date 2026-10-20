@@ -16,6 +16,7 @@
   "Folder to search": "Folder to search",
   "Browse...": "Browse...",
   "Include subfolders": "Include subfolders",
+  "Also open the results as text": "Also open the results as text",
   "Search": "Search",
   "Cancel": "Cancel",
   "{0} hit": "{0} hit",
@@ -23,6 +24,16 @@
   "Open": "Open",
   "More hits were omitted (officeSearch.maxHitsPerFile)": "More hits were omitted (officeSearch.maxHitsPerFile)",
   "Skipped ({0})": "Skipped ({0})",
+  "Office Content Search results": "Office Content Search results",
+  "Keywords: {0}": "Keywords: {0}",
+  "Mode: match all (AND)": "Mode: match all (AND)",
+  "Mode: match any (OR)": "Mode: match any (OR)",
+  "Folder: {0}": "Folder: {0}",
+  "Subfolders: included": "Subfolders: included",
+  "Subfolders: not included": "Subfolders: not included",
+  "Files scanned: {0} / Matching files: {1} / Hits: {2} / Skipped: {3}": "Files scanned: {0} / Matching files: {1} / Hits: {2} / Skipped: {3}",
+  "* The search was cancelled. The results may be incomplete.": "* The search was cancelled. The results may be incomplete.",
+  "No matching files were found.": "No matching files were found.",
   "Could not open {0}": "Could not open {0}",
   "Body": "Body",
   "Text Box": "Text Box",
@@ -46,5 +57,7 @@
   "Password-protected file": "Password-protected file",
   "Not an Office file, or the file is corrupt": "Not an Office file, or the file is corrupt",
   "Could not open the folder": "Could not open the folder",
-  "Could not read the file": "Could not read the file"
+  "Could not read the file": "Could not read the file",
+  "Copied: {0}": "Copied: {0}",
+  "Run a search first.": "Run a search first."
 }

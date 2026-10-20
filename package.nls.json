@@ -9,5 +9,8 @@
   "config.includeSubfolders": "Include subfolders by default.",
   "config.excludeFolders": "Folder names to skip when searching subfolders.",
   "config.maxFileSizeMB": "Files larger than this size (MB) are skipped.",
-  "config.maxHitsPerFile": "Maximum number of hits per file."
+  "config.maxHitsPerFile": "Maximum number of hits per file.",
+  "command.copyFileName": "Copy File Name",
+  "command.copyPath": "Copy Path",
+  "command.openAsText": "Open Results as Text"
 }
