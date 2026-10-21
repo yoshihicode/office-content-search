@@ -52,10 +52,8 @@ Files that could not be searched are listed under **Skipped** with the reason.
 
 ## Limitations
 
-- Legacy formats (`.doc`, `.xls`, `.ppt`) are not supported and are listed as skipped.
+- Legacy formats (`.doc`, `.ppt`) are not supported and are listed as skipped.
 - Password-protected or encrypted files (including files protected by sensitivity labels) are skipped.
-- Only saved content is searched. Save your changes in Office before searching.
-- Excel cells are matched by their stored values: dates are stored as serial numbers (e.g. `46310`), and formulas themselves are not searched (only their results).
 - Word text is matched per paragraph. A phrase that spans two paragraphs is not found.
 - Text deleted with Track Changes is not searched.
 - In remote environments (WSL, SSH, Dev Containers), opening a result may depend on your environment.
