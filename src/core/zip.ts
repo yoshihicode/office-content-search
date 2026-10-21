@@ -45,3 +45,8 @@ export function readText(files: ZipFiles, name: string): string | undefined {
     const data = files[name];
     return data ? strFromU8(data) : undefined;
 }
+
+/** OLE 複合ファイル（旧形式の .xls/.doc/.ppt や、暗号化された Office ファイルの入れ物）か */
+export function isCompoundFile(data: Uint8Array): boolean {
+    return startsWith(data, CFB_SIGNATURE);
+}

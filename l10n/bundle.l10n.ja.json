@@ -52,7 +52,7 @@
   "Series Name": "系列名",
   "Slide {0}": "スライド {0}",
   "Notes": "ノート",
-  "Legacy format (.doc/.xls/.ppt) is not supported": "旧形式（.doc/.xls/.ppt）には未対応です",
+  "Legacy format (.doc/.ppt) is not supported": "旧形式（.doc/.ppt）には未対応です",
   "File is larger than the size limit (officeSearch.maxFileSizeMB)": "サイズの上限（officeSearch.maxFileSizeMB）を超えています",
   "Password-protected file": "パスワード付きのファイルです",
   "Not an Office file, or the file is corrupt": "Office ファイルではないか、破損しています",

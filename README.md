@@ -25,6 +25,7 @@ Search text inside Word, Excel and PowerPoint files in a folder — and see exac
 | --- | --- |
 | Word (`.docx`) | Body paragraphs and tables, text boxes, headers and footers, footnotes, endnotes, comments, charts, SmartArt |
 | Excel (`.xlsx`) | Cell values, shapes and text boxes, charts (titles, axis titles, series names), chart sheets, SmartArt |
+| Excel (`.xls`) | Cell values only |
 | PowerPoint (`.pptx`) | Slide text and tables, speaker notes, charts, SmartArt |
 
 ## Usage

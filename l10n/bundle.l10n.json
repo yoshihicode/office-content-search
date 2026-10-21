@@ -52,7 +52,7 @@
   "Series Name": "Series Name",
   "Slide {0}": "Slide {0}",
   "Notes": "Notes",
-  "Legacy format (.doc/.xls/.ppt) is not supported": "Legacy format (.doc/.xls/.ppt) is not supported",
+  "Legacy format (.doc/.ppt) is not supported": "Legacy format (.doc/.ppt) is not supported",
   "File is larger than the size limit (officeSearch.maxFileSizeMB)": "File is larger than the size limit (officeSearch.maxFileSizeMB)",
   "Password-protected file": "Password-protected file",
   "Not an Office file, or the file is corrupt": "Not an Office file, or the file is corrupt",

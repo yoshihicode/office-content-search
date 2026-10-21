@@ -55,7 +55,13 @@ export class SearchRunner {
         const matcher = new Matcher(keywords, mode);
         // 設定は検索のたびに読む（設定を変えたら、次の検索からすぐ反映される）
         const config = readConfig();
-        const searchOptions = { maxFileSizeBytes: config.maxFileSizeBytes, labels: localizedLabels(), maxHitsPerFile: config.maxHitsPerFile };
+        const searchOptions = {
+            maxFileSizeBytes: config.maxFileSizeBytes,
+            maxHitsPerFile: config.maxHitsPerFile,
+            // 日本語の Excel の「短い日付形式」は yyyy/m/d、英語（米国）は m/d/yyyy で表示される
+            xlsDateFormat: vscode.env.language.startsWith('ja') ? 'yyyy/m/d' : 'm/d/yyyy',
+            labels: localizedLabels(),
+        };
         let scanned = 0;
         try {
             await vscode.window.withProgress(

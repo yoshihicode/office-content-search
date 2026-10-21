@@ -32,7 +32,7 @@ export function localizedLabels(): Labels {
 export function skipReasonText(reason: OfficeFileErrorReason | 'folder' | 'unknown'): string {
   switch (reason) {
     case 'legacy':
-      return vscode.l10n.t('Legacy format (.doc/.xls/.ppt) is not supported');
+      return vscode.l10n.t('Legacy format (.doc/.ppt) is not supported');
     case 'tooLarge':
       return vscode.l10n.t('File is larger than the size limit (officeSearch.maxFileSizeMB)');
     case 'encrypted':

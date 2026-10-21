@@ -2,9 +2,10 @@ import { promises as fs } from 'fs';
 import { extractTextUnits } from './extract';
 import { Matcher } from './query';
 import { defaultLabels, FileResult, Hit, Labels } from './types';
-import { OfficeFileError, openOfficeFile } from './zip';
+import { isCompoundFile, OfficeFileError, openOfficeFile } from './zip';
 
-const LEGACY_FILE = /\.(doc|xls|ppt)$/i;
+const LEGACY_FILE = /\.(doc|ppt)$/i;
+const XLS_FILE = /\.xls$/i;
 
 export interface SearchOptions {
     /** これより大きいファイルは読まずにスキップする */
@@ -13,7 +14,10 @@ export interface SearchOptions {
     maxHitsPerFile: number;
     /** 位置の表示名（翻訳済み）。省略時は英語 */
     labels?: Labels;
+    /** .xls の「短い日付形式」の表示に使う書式。省略時は yyyy/m/d */
+    xlsDateFormat?: string;
 }
+
 
 /**
  * 1つのファイルを検索する
@@ -25,7 +29,7 @@ export async function searchFile(
     options: SearchOptions,
 ): Promise<FileResult | undefined> {
     if (LEGACY_FILE.test(filePath)) {
-        throw new OfficeFileError('legacy', 'legacy binary format is not supported');
+        throw new OfficeFileError('legacy', 'legacy binary format (.doc/.ppt) is not supported');
     }
     // 読み込む前にサイズを確かめる（巨大なファイルで拡張機能ホストが固まるのを防ぐ）
     const { size } = await fs.stat(filePath);
@@ -33,7 +37,9 @@ export async function searchFile(
         throw new OfficeFileError('tooLarge', 'file is larger than the size limit');
     }
 
-    const units = extractTextUnits(filePath, await openOfficeFile(filePath), options.labels ?? defaultLabels);
+    const units = XLS_FILE.test(filePath)
+        ? await readXls(filePath, options.xlsDateFormat)
+        : extractTextUnits(filePath, await openOfficeFile(filePath), options.labels ?? defaultLabels);
     const found = new Set<string>();
     const hits: Hit[] = [];
     let truncated = false;
@@ -51,4 +57,21 @@ export async function searchFile(
         }
     }
     return matcher.satisfiedBy(found) ? { path: filePath, hits, truncated } : undefined;
+}
+
+/** SheetJSでxls を読む */
+async function readXls(filePath: string, dateFormat?: string) {
+    const data = await fs.readFile(filePath);
+    if (!isCompoundFile(data)) {
+        throw new OfficeFileError('notOfficeFile', 'not an Excel 97-2003 (.xls) file');
+    }
+    // 必要になったときに初めて SheetJS を読み込む（拡張機能の起動を遅くしないため）
+    const { extractXlsUnits } = await import('./xls');
+    try {
+        return extractXlsUnits(data, dateFormat);
+    } catch (e) {
+        const message = (e as Error).message ?? String(e);
+        if (/password|encrypt/i.test(message)) throw new OfficeFileError('encrypted', message);
+        throw new OfficeFileError('notOfficeFile', message);
+    }
 }
