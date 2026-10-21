@@ -1,7 +1,7 @@
 import { promises as fs } from 'fs';
 import * as path from 'path';
 
-const OFFICE_FILE = /\.(docx|xlsx|pptx)$/i;
+const OFFICE_FILE = /\.(docx|xlsx|pptx|doc|xls|ppt)$/i;
 
 export interface WalkOptions {
     recursive: boolean;          // サブフォルダも探すか
