@@ -12,5 +12,6 @@
   "config.maxHitsPerFile": "Maximum number of hits per file.",
   "command.copyFileName": "Copy File Name",
   "command.copyPath": "Copy Path",
-  "command.openAsText": "Open Results as Text"
+  "command.openAsText": "Open Results as Text",
+  "description": "Search text inside Word, Excel and PowerPoint files in a folder, and see where it appears (sheet and cell, paragraph, slide)."
 }

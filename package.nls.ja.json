@@ -12,5 +12,6 @@
   "config.maxHitsPerFile": "1ファイルあたりのヒット数の上限",
   "command.copyFileName": "ファイル名をコピー",
   "command.copyPath": "パスをコピー",
-  "command.openAsText": "結果をテキストで開く"
+  "command.openAsText": "結果をテキストで開く",
+  "description": "フォルダ内の Word・Excel・PowerPoint ファイルの中身を検索し、シートとセル、段落、スライドなどの位置まで表示します。"
 }
