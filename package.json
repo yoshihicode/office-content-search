@@ -1,7 +1,7 @@
 {
   "name": "office-content-search",
   "displayName": "Office Content Search",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "icon": "media/icon.png",
   "publisher": "yoshihicode",
   "repository": {
