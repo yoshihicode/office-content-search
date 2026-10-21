@@ -5,6 +5,20 @@
   "version": "0.2.0",
   "icon": "media/icon.png",
   "publisher": "yoshihicode",
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "office",
+    "excel",
+    "word",
+    "powerpoint",
+    "search",
+    "xlsx",
+    "docx",
+    "pptx",
+    "xls"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/yoshihicode/office-content-search.git"
@@ -182,6 +196,16 @@
           "default": 200,
           "minimum": 1,
           "description": "%config.maxHitsPerFile%"
+        },
+        "officeSearch.excelShortDateFormat": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "%config.excelShortDateFormat%",
+          "examples": [
+            "yyyy/m/d",
+            "m/d/yyyy",
+            "d/m/yyyy"
+          ]
         }
       }
     }

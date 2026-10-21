@@ -13,5 +13,6 @@
   "command.copyFileName": "Copy File Name",
   "command.copyPath": "Copy Path",
   "command.openAsText": "Open Results as Text",
-  "description": "Search text inside Word, Excel and PowerPoint files in a folder, and see where it appears (sheet and cell, paragraph, slide)."
+  "description": "Search text inside Word, Excel and PowerPoint files in a folder, and see where it appears (sheet and cell, paragraph, slide).",
+  "config.excelShortDateFormat": "Format of Excel dates entered without a specific format (the \"Short Date\" format), such as `yyyy/m/d` or `m/d/yyyy`. Leave empty to choose by the VS Code display language. Set this to match how dates appear in your Excel."
 }

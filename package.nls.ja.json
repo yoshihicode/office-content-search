@@ -13,5 +13,6 @@
   "command.copyFileName": "ファイル名をコピー",
   "command.copyPath": "パスをコピー",
   "command.openAsText": "結果をテキストで開く",
-  "description": "フォルダ内の Word・Excel・PowerPoint ファイルの中身を検索し、シートとセル、段落、スライドなどの位置まで表示します。"
+  "description": "フォルダ内の Word・Excel・PowerPoint ファイルの中身を検索し、シートとセル、段落、スライドなどの位置まで表示します。",
+  "config.excelShortDateFormat": "表示形式を指定せずに入力した Excel の日付（「短い日付形式」）を、どの書式の文字で照合するか。例: `yyyy/m/d`、`m/d/yyyy`。空にすると、VS Code の表示言語で決めます。お使いの Excel での日付の表示に合わせてください。"
 }
