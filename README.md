@@ -41,7 +41,8 @@ Excel cells are matched as follows (the same for `.xlsx` and `.xls`):
 3. Choose **Match any (OR)** or **Match all (AND)**. AND means the *file* contains every keyword (not necessarily in the same cell or paragraph).
 4. Enter a folder or click **Browse...**, and select **Include subfolders** if needed.
 5. Optionally select **Also open the results as text**.
-6. Click **Search**.
+6. Select the **File types** to search (`.xls`, `.xlsx`, `.docx`, `.pptx`).
+7. Click **Search**.
 
 You can also right-click a folder in the Explorer and select **Search Office Files in This Folder**.
 
