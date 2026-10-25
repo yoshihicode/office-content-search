@@ -3,13 +3,14 @@ import * as vscode from 'vscode';
 import { readConfig } from './config';
 import { MatchMode, parseQuery } from './core/query';
 import { SearchRunner } from './searchRunner';
+import { SUPPORTED_FILE_TYPES } from './core/walk';
 
 /** Webview → 拡張機能 のメッセージ */
 type FromWebview =
     | { type: 'ready' }
     | { type: 'browse' }
     | { type: 'cancel' }
-    | { type: 'search'; query: string; mode: MatchMode; folder: string; recursive: boolean; outputText: boolean };
+    | { type: 'search'; query: string; mode: MatchMode; folder: string; recursive: boolean; outputText: boolean; fileTypes: string[] };
 
 /** 拡張機能 → Webview のメッセージ */
 type ToWebview =
@@ -109,8 +110,14 @@ export class SearchFormProvider implements vscode.WebviewViewProvider {
                     this.post({ type: 'error', message: vscode.l10n.t('The path is not a folder') });
                     return;
                 }
+                const fileTypes = (Array.isArray(msg.fileTypes) ? msg.fileTypes : []).filter((t) => SUPPORTED_FILE_TYPES.includes(t));
+                if (fileTypes.length === 0) {
+                    this.post({ type: 'error', message: vscode.l10n.t('Select at least one file type') });
+                    return;
+                }
+
                 const mode: MatchMode = msg.mode === 'all' ? 'all' : 'any';
-                await this.runner.run({ keywords, mode, root: msg.folder, recursive: msg.recursive === true, outputText: msg.outputText === true, });
+                await this.runner.run({ keywords, mode, root: msg.folder, recursive: msg.recursive === true, outputText: msg.outputText === true, fileTypes: fileTypes });
                 break;
             }
         }
@@ -155,6 +162,11 @@ export class SearchFormProvider implements vscode.WebviewViewProvider {
 
     <label class="inline"><input id="recursive" type="checkbox" checked> ${e(vscode.l10n.t('Include subfolders'))}</label>
     <label class="inline"><input id="outputText" type="checkbox"> ${e(vscode.l10n.t('Also open the results as text'))}</label>
+
+    <fieldset>
+      <legend>${e(vscode.l10n.t('File types'))}</legend>
+      ${SUPPORTED_FILE_TYPES.map((t) => `<label class="inline"><input type="checkbox" name="target" value="${t}" checked> .${t}</label>`).join('\n      ')}
+    </fieldset>
 
     <p id="error" class="error" role="alert"></p>
 

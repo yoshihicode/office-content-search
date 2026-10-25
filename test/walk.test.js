@@ -8,7 +8,7 @@ const { collectFiles } = require('../out/core/walk');
 /** 一時フォルダにテスト用のファイル構成を作る */
 function makeTree() {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), 'walk-'));
-    for (const f of ['a.docx', 'b.XLSX', 'c.pptx', 'memo.txt', '~$a.docx', 'sub/d.docx', 'sub/deep/e.xlsx', '.git/f.docx']) {
+    for (const f of ['a.docx', 'b.XLSX', 'f.xls', 'c.pptx', 'memo.txt', '~$a.docx', 'sub/d.docx', 'sub/deep/e.xlsx', '.git/f.docx']) {
         fs.mkdirSync(path.dirname(path.join(root, f)), { recursive: true });
         fs.writeFileSync(path.join(root, f), '');
     }
@@ -19,17 +19,25 @@ const names = (root, r) => r.files.map((f) => path.relative(root, f).split(path.
 test('サブフォルダを含めない', async () => {
     const root = makeTree();
     const r = await collectFiles(root, { recursive: false, excludeFolders: new Set() });
-    assert.deepEqual(names(root, r), ['a.docx', 'b.XLSX', 'c.pptx']);
+    assert.deepEqual(names(root, r), ['a.docx', 'b.XLSX', 'c.pptx', 'f.xls']);
 });
 
 test('サブフォルダを含め、除外フォルダとロックファイルは飛ばす', async () => {
     const root = makeTree();
     const r = await collectFiles(root, { recursive: true, excludeFolders: new Set(['.git']) });
-    assert.deepEqual(names(root, r), ['a.docx', 'b.XLSX', 'c.pptx', 'sub/d.docx', 'sub/deep/e.xlsx']);
+    assert.deepEqual(names(root, r), ['a.docx', 'b.XLSX', 'c.pptx', 'f.xls', 'sub/d.docx', 'sub/deep/e.xlsx']);
 });
 
 test('キャンセルされたら途中で止まる', async () => {
     const root = makeTree();
     const r = await collectFiles(root, { recursive: true, excludeFolders: new Set(), isCancelled: () => true });
     assert.deepEqual(r.files, []);
+});
+
+test('ファイル種別で絞り込める（大文字の拡張子も対象、不正な値は無視）', async () => {
+    const root = makeTree();
+    const r = await collectFiles(root, { recursive: false, excludeFolders: new Set(), fileTypes: ['xlsx', 'xls'] });
+    assert.deepEqual(names(root, r), ['b.XLSX', 'f.xls']);
+    const bad = await collectFiles(root, { recursive: false, excludeFolders: new Set(), fileTypes: ['.*'] });
+    assert.deepEqual(bad.files, []);
 });

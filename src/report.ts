@@ -34,6 +34,9 @@ export function buildReport(s: SearchSummary): string {
     }
     lines.push(vscode.l10n.t('Folder: {0}', params.root));
     lines.push(params.recursive ? vscode.l10n.t('Subfolders: included') : vscode.l10n.t('Subfolders: not included'));
+    if (params.fileTypes && params.fileTypes.length < 4) {
+        lines.push(vscode.l10n.t('File types: {0}', params.fileTypes.map((t) => '.' + t).join(', ')));
+    }
     lines.push(
         vscode.l10n.t(
             'Files scanned: {0} / Matching files: {1} / Hits: {2} / Skipped: {3}',

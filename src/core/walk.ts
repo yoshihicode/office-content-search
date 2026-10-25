@@ -3,10 +3,13 @@ import * as path from 'path';
 
 const OFFICE_FILE = /\.(docx|xlsx|pptx|doc|xls|ppt)$/i;
 
+export const SUPPORTED_FILE_TYPES = ['docx', 'xlsx', 'pptx', 'xls'];
+
 export interface WalkOptions {
     recursive: boolean;          // サブフォルダも探すか
     excludeFolders: Set<string>; // 探さないフォルダ名（.git など）
     isCancelled?: () => boolean; // キャンセルされたか
+    fileTypes?: string[]; // 検索するファイルの拡張子（空ならすべて）
 }
 
 export interface WalkResult {
@@ -18,6 +21,13 @@ export interface WalkResult {
 /** フォルダの中の Office ファイルを集める */
 export async function collectFiles(root: string, options: WalkOptions): Promise<WalkResult> {
     const result: WalkResult = { files: [], errors: [] };
+
+    const wanted =
+        options.fileTypes && options.fileTypes.length > 0
+            ? new Set(options.fileTypes.map((t) => '.' + t.toLowerCase()))
+            : undefined;
+    const isTarget = (name: string) =>
+        OFFICE_FILE.test(name) && (wanted === undefined || wanted.has(path.extname(name).toLowerCase()));
 
     async function visit(dir: string): Promise<void> {
         if (options.isCancelled?.()) return;
@@ -35,7 +45,7 @@ export async function collectFiles(root: string, options: WalkOptions): Promise<
             const full = path.join(dir, entry.name);
             if (entry.isDirectory()) {
                 if (options.recursive && !options.excludeFolders.has(entry.name)) await visit(full);
-            } else if (entry.isFile() && OFFICE_FILE.test(entry.name) && !entry.name.startsWith('~$')) {
+            } else if (entry.isFile() && isTarget(entry.name) && !entry.name.startsWith('~$')) {
                 result.files.push(full);
             }
         }

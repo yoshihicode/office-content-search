@@ -14,6 +14,9 @@
 
     const selectedMode = () => document.querySelector('input[name="mode"]:checked').value;
 
+    const selectedTypes = () =>
+        Array.from(document.querySelectorAll('input[name="target"]:checked')).map((t) => t.value);
+
     // --- 入力内容の保存と復元（サイドバーを閉じて開き直しても残るように） ---
     function saveState() {
         vscode.setState({
@@ -22,6 +25,7 @@
             recursive: recursive.checked,
             mode: selectedMode(),
             outputText: outputText.checked,
+            fileTypes: selectedTypes(),
         });
     }
     const state = vscode.getState();
@@ -32,6 +36,11 @@
         outputText.checked = state.outputText ?? false;
         const radio = document.querySelector(`input[name="mode"][value="${state.mode}"]`);
         if (radio) radio.checked = true;
+        if (Array.isArray(state.fileTypes)) {
+            document.querySelectorAll('input[name="target"]').forEach((t) => {
+                t.checked = state.fileTypes.includes(t.value);
+            });
+        }
     }
     form.addEventListener('input', saveState);
     form.addEventListener('change', saveState);
@@ -47,6 +56,7 @@
             folder: folder.value.trim(),
             recursive: recursive.checked,
             outputText: outputText.checked,
+            fileTypes: selectedTypes(),
         });
     });
     document.getElementById('browse').addEventListener('click', () => vscode.postMessage({ type: 'browse' }));
