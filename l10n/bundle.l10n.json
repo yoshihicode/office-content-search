@@ -39,6 +39,7 @@
   "Files scanned: {0} / Matching files: {1} / Hits: {2} / Skipped: {3}": "Files scanned: {0} / Matching files: {1} / Hits: {2} / Skipped: {3}",
   "* The search was cancelled. The results may be incomplete.": "* The search was cancelled. The results may be incomplete.",
   "No matching files were found.": "No matching files were found.",
+  "Opening {0}...": "Opening {0}...",
   "Could not open {0}": "Could not open {0}",
   "Body": "Body",
   "Text Box": "Text Box",

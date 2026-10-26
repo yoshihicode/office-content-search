@@ -39,6 +39,7 @@
   "Files scanned: {0} / Matching files: {1} / Hits: {2} / Skipped: {3}": "対象ファイル数: {0} / 該当ファイル数: {1} / ヒット件数: {2} / スキップ: {3}",
   "* The search was cancelled. The results may be incomplete.": "* 検索はキャンセルされました。結果が不完全な可能性があります。",
   "No matching files were found.": "該当するファイルは見つかりませんでした。",
+  "Opening {0}...": " {0} を開いています...",
   "Could not open {0}": "{0} を開けませんでした",
   "Body": "本文",
   "Text Box": "テキストボックス",

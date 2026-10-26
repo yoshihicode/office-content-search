@@ -84,11 +84,13 @@ For example, if you use VS Code in English but Excel shows dates as `2026/10/21`
 - Excel formulas themselves are not searched (only their results).
 - Word text is matched per paragraph. A phrase that spans two paragraphs is not found.
 - Text deleted with Track Changes is not searched.
-- In remote environments (WSL, SSH, Dev Containers), opening a result may not work depending on your environment.
+- Clicking a result opens the file with the application associated with its file type. In WSL, the Windows application is used. In other remote environments (SSH, Dev Containers), opening a result may not work.
 
 ## Requirements
 
-VS Code 1.85 or later.
+VS Code 1.85 or later.  
+  
+Opening files from the results has been tested on Windows and WSL.
 
 ## Contributing
 
