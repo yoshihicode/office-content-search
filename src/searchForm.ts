@@ -1,16 +1,16 @@
 import { randomBytes } from 'crypto';
 import * as vscode from 'vscode';
 import { readConfig } from './config';
+import { APP_KINDS, AppKind, FILE_TYPES } from './core/fileTypes';
 import { MatchMode, parseQuery } from './core/query';
 import { SearchRunner } from './searchRunner';
-import { SUPPORTED_FILE_TYPES } from './core/walk';
 
 /** Webview → 拡張機能 のメッセージ */
 type FromWebview =
     | { type: 'ready' }
     | { type: 'browse' }
     | { type: 'cancel' }
-    | { type: 'search'; query: string; mode: MatchMode; folder: string; recursive: boolean; outputText: boolean; fileTypes: string[] };
+    | { type: 'search'; query: string; mode: MatchMode; folder: string; recursive: boolean; outputText: boolean; apps: string[] };
 
 /** 拡張機能 → Webview のメッセージ */
 type ToWebview =
@@ -110,14 +110,23 @@ export class SearchFormProvider implements vscode.WebviewViewProvider {
                     this.post({ type: 'error', message: vscode.l10n.t('The path is not a folder') });
                     return;
                 }
-                const fileTypes = (Array.isArray(msg.fileTypes) ? msg.fileTypes : []).filter((t) => SUPPORTED_FILE_TYPES.includes(t));
-                if (fileTypes.length === 0) {
+                // アプリの種類は、決められた値だけを受け付ける（Webview から届く値は信用しない）
+                const apps = (Array.isArray(msg.apps) ? msg.apps : []).filter((a): a is AppKind =>
+                    (APP_KINDS as string[]).includes(a),
+                );
+                if (apps.length === 0) {
                     this.post({ type: 'error', message: vscode.l10n.t('Select at least one file type') });
                     return;
                 }
-
                 const mode: MatchMode = msg.mode === 'all' ? 'all' : 'any';
-                await this.runner.run({ keywords, mode, root: msg.folder, recursive: msg.recursive === true, outputText: msg.outputText === true, fileTypes: fileTypes });
+                await this.runner.run({
+                    keywords,
+                    mode,
+                    root: msg.folder,
+                    recursive: msg.recursive === true,
+                    outputText: msg.outputText === true,
+                    apps,
+                });
                 break;
             }
         }
@@ -146,7 +155,7 @@ export class SearchFormProvider implements vscode.WebviewViewProvider {
 <body>
   <form id="form">
     <label for="query">${e(vscode.l10n.t('Keywords'))}</label>
-    <input id="query" type="text" autocomplete="off">
+    <input id="query" type="text" placeholder="${e(vscode.l10n.t('e.g. invoice 2026 "project plan"'))}" autocomplete="off">
 
     <fieldset>
       <legend>${e(vscode.l10n.t('With multiple keywords'))}</legend>
@@ -161,13 +170,19 @@ export class SearchFormProvider implements vscode.WebviewViewProvider {
     </div>
 
     <label class="inline"><input id="recursive" type="checkbox" checked> ${e(vscode.l10n.t('Include subfolders'))}</label>
-    <label class="inline"><input id="outputText" type="checkbox"> ${e(vscode.l10n.t('Also open the results as text'))}</label>
 
     <fieldset>
       <legend>${e(vscode.l10n.t('File types'))}</legend>
-      ${SUPPORTED_FILE_TYPES.map((t) => `<label class="inline"><input type="checkbox" name="target" value="${t}" checked> .${t}</label>`).join('\n      ')}
+      ${APP_KINDS.map((app) => {
+            // 例: Excel（.xlsx / .xlsm / .xls）。チェックボックスは FILE_TYPES の一覧から作る
+            const label = `${FILE_TYPES[app].label} (${FILE_TYPES[app].extensions.join(' / ')})`;
+            return `<label class="inline"><input type="checkbox" name="app" value="${app}" checked> ${e(label)}</label>`;
+        }).join('\n      ')}
     </fieldset>
-
+    <fieldset>
+        <legend>${e(vscode.l10n.t('Output'))}</legend>
+        <label class="inline"><input id="outputText" type="checkbox"> ${e(vscode.l10n.t('Also open the results as text'))}</label>
+    </fieldset>
     <p id="error" class="error" role="alert"></p>
 
     <div class="row">

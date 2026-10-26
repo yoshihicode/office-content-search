@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { makeSnippet } from './core/snippet';
+import { APP_KINDS, FILE_TYPES } from './core/fileTypes';
 import { FileResult } from './core/types';
 import type { Skipped } from './resultsView';
 import type { SearchParams } from './searchRunner';
@@ -34,8 +35,9 @@ export function buildReport(s: SearchSummary): string {
     }
     lines.push(vscode.l10n.t('Folder: {0}', params.root));
     lines.push(params.recursive ? vscode.l10n.t('Subfolders: included') : vscode.l10n.t('Subfolders: not included'));
-    if (params.fileTypes && params.fileTypes.length < 4) {
-        lines.push(vscode.l10n.t('File types: {0}', params.fileTypes.map((t) => '.' + t).join(', ')));
+    // 一部のアプリだけで検索したときは、それが分かるように書いておく
+    if (params.apps && params.apps.length < APP_KINDS.length) {
+        lines.push(vscode.l10n.t('File types: {0}', params.apps.map((a) => FILE_TYPES[a].label).join(', ')));
     }
     lines.push(
         vscode.l10n.t(

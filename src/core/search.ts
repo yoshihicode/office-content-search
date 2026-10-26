@@ -4,10 +4,9 @@ import { Matcher } from './query';
 import type { DateFormatter } from './dateFormat';
 import { defaultLabels, FileResult, Hit, Labels } from './types';
 import { isCompoundFile, OfficeFileError, openOfficeFile } from './zip';
+import { appOf, isLegacy } from './fileTypes';
 
-const LEGACY_FILE = /\.(doc|ppt)$/i; // .xls は SheetJS で読める
 const XLS_FILE = /\.xls$/i;
-const XLSX_FILE = /\.xlsx$/i;
 
 export interface SearchOptions {
   /** これより大きいファイルは読まずにスキップする */
@@ -29,7 +28,7 @@ export async function searchFile(
   matcher: Matcher,
   options: SearchOptions,
 ): Promise<FileResult | undefined> {
-  if (LEGACY_FILE.test(filePath)) {
+  if (isLegacy(filePath)) {
     throw new OfficeFileError('legacy', 'legacy binary format (.doc/.ppt) is not supported');
   }
   // 読み込む前にサイズを確かめる（巨大なファイルで拡張機能ホストが固まるのを防ぐ）
@@ -38,11 +37,12 @@ export async function searchFile(
     throw new OfficeFileError('tooLarge', 'file is larger than the size limit');
   }
 
+  // .xls は SheetJS で読む。中身の構造は .xlsx と同じなので、抽出方法は同じ
   const units = XLS_FILE.test(filePath)
     ? await readXls(filePath, options.xlsDateFormat)
     : extractTextUnits(filePath, await openOfficeFile(filePath), options.labels ?? defaultLabels, {
-        formatDate: XLSX_FILE.test(filePath) ? await getDateFormatter(options.xlsDateFormat) : undefined,
-      });
+      formatDate: appOf(filePath) === 'excel' ? await getDateFormatter(options.xlsDateFormat) : undefined,
+    });
   const found = new Set<string>();
   const hits: Hit[] = [];
   let truncated = false;

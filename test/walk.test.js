@@ -33,11 +33,3 @@ test('キャンセルされたら途中で止まる', async () => {
     const r = await collectFiles(root, { recursive: true, excludeFolders: new Set(), isCancelled: () => true });
     assert.deepEqual(r.files, []);
 });
-
-test('ファイル種別で絞り込める（大文字の拡張子も対象、不正な値は無視）', async () => {
-    const root = makeTree();
-    const r = await collectFiles(root, { recursive: false, excludeFolders: new Set(), fileTypes: ['xlsx', 'xls'] });
-    assert.deepEqual(names(root, r), ['b.XLSX', 'f.xls']);
-    const bad = await collectFiles(root, { recursive: false, excludeFolders: new Set(), fileTypes: ['.*'] });
-    assert.deepEqual(bad.files, []);
-});

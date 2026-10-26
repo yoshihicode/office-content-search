@@ -1,5 +1,6 @@
 import * as path from 'path';
 import * as vscode from 'vscode';
+import { AppKind } from './core/fileTypes';
 import { Matcher, MatchMode } from './core/query';
 import { searchFile } from './core/search';
 import { collectFiles } from './core/walk';
@@ -17,7 +18,8 @@ export interface SearchParams {
     recursive: boolean;
     /** 検索が終わったら、結果をテキストでも出力する */
     outputText?: boolean;
-    fileTypes?: string[]; // 検索するファイルの拡張子（空ならすべて）
+    /** 検索するアプリの種類。省略または空ならすべて */
+    apps?: AppKind[];
 }
 
 /** 検索の実行と状態を管理する（同時に動く検索は1つだけ） */
@@ -43,7 +45,7 @@ export class SearchRunner {
     }
 
     async run(params: SearchParams): Promise<void> {
-        const { keywords, mode, root, recursive, fileTypes } = params;
+        const { keywords, mode, root, recursive, apps } = params;
         this.cancel(); // 前の検索が動いていれば止める
         const cts = new vscode.CancellationTokenSource();
         this.running = cts;
@@ -75,7 +77,7 @@ export class SearchRunner {
                         recursive,
                         excludeFolders: config.excludeFolders,
                         isCancelled,
-                        fileTypes,
+                        apps,
                     });
                     errors.forEach((e) => this.provider.addSkipped({ path: e.path, reason: skipReasonText('folder') }));
 

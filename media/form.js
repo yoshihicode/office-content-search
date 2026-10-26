@@ -7,25 +7,24 @@
     const query = document.getElementById('query');
     const folder = document.getElementById('folder');
     const recursive = document.getElementById('recursive');
+    const outputText = document.getElementById('outputText');
     const error = document.getElementById('error');
     const searchButton = document.getElementById('search');
     const cancelButton = document.getElementById('cancel');
-    const outputText = document.getElementById('outputText');
 
     const selectedMode = () => document.querySelector('input[name="mode"]:checked').value;
+    const appBoxes = () => Array.from(document.querySelectorAll('input[name="app"]'));
+    const selectedApps = () => appBoxes().filter((el) => el.checked).map((el) => el.value);
 
-    const selectedTypes = () =>
-        Array.from(document.querySelectorAll('input[name="target"]:checked')).map((t) => t.value);
-
-    // --- 入力内容の保存と復元（サイドバーを閉じて開き直しても残るように） ---
+    // 入力内容の保存と復元
     function saveState() {
         vscode.setState({
             query: query.value,
             folder: folder.value,
             recursive: recursive.checked,
-            mode: selectedMode(),
             outputText: outputText.checked,
-            fileTypes: selectedTypes(),
+            apps: selectedApps(),
+            mode: selectedMode(),
         });
     }
     const state = vscode.getState();
@@ -36,10 +35,11 @@
         outputText.checked = state.outputText ?? false;
         const radio = document.querySelector(`input[name="mode"][value="${state.mode}"]`);
         if (radio) radio.checked = true;
-        if (Array.isArray(state.fileTypes)) {
-            document.querySelectorAll('input[name="target"]').forEach((t) => {
-                t.checked = state.fileTypes.includes(t.value);
-            });
+        // 保存された値のうち、今のチェックボックスにあるものだけを使う。
+        // 以前の版で保存した値（'xlsx' などの拡張子）しかなければ、既定（すべてチェック）のままにする
+        const saved = Array.isArray(state.apps) ? state.apps : [];
+        if (appBoxes().some((el) => saved.includes(el.value))) {
+            appBoxes().forEach((el) => (el.checked = saved.includes(el.value)));
         }
     }
     form.addEventListener('input', saveState);
@@ -56,7 +56,7 @@
             folder: folder.value.trim(),
             recursive: recursive.checked,
             outputText: outputText.checked,
-            fileTypes: selectedTypes(),
+            apps: selectedApps(),
         });
     });
     document.getElementById('browse').addEventListener('click', () => vscode.postMessage({ type: 'browse' }));
@@ -66,6 +66,10 @@
     window.addEventListener('message', (event) => {
         const msg = event.data;
         switch (msg.type) {
+            case 'defaults':
+                // 保存済みの入力がなければ、設定の既定値を使う
+                if (!state) recursive.checked = msg.recursive;
+                break;
             case 'setFolder':
                 // 入力済みのフォルダがあれば、初期値（ワークスペースのフォルダ）では上書きしない
                 if (!(msg.initial && folder.value)) folder.value = msg.folder;

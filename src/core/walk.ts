@@ -1,15 +1,12 @@
 import { promises as fs } from 'fs';
 import * as path from 'path';
-
-const OFFICE_FILE = /\.(docx|xlsx|pptx|doc|xls|ppt)$/i;
-
-export const SUPPORTED_FILE_TYPES = ['docx', 'xlsx', 'pptx', 'xls'];
+import { AppKind, appOf } from './fileTypes';
 
 export interface WalkOptions {
     recursive: boolean;          // サブフォルダも探すか
     excludeFolders: Set<string>; // 探さないフォルダ名（.git など）
     isCancelled?: () => boolean; // キャンセルされたか
-    fileTypes?: string[]; // 検索するファイルの拡張子（空ならすべて）
+    apps?: AppKind[]; // 検索するアプリの種類。省略または空ならすべて
 }
 
 export interface WalkResult {
@@ -22,12 +19,12 @@ export interface WalkResult {
 export async function collectFiles(root: string, options: WalkOptions): Promise<WalkResult> {
     const result: WalkResult = { files: [], errors: [] };
 
-    const wanted =
-        options.fileTypes && options.fileTypes.length > 0
-            ? new Set(options.fileTypes.map((t) => '.' + t.toLowerCase()))
-            : undefined;
-    const isTarget = (name: string) =>
-        OFFICE_FILE.test(name) && (wanted === undefined || wanted.has(path.extname(name).toLowerCase()));
+    // アプリの指定があれば、そのアプリのファイルだけを対象にする
+    const wanted = options.apps && options.apps.length > 0 ? new Set(options.apps) : undefined;
+    const isTarget = (name: string) => {
+        const app = appOf(name);
+        return app !== undefined && (wanted === undefined || wanted.has(app));
+    };
 
     async function visit(dir: string): Promise<void> {
         if (options.isCancelled?.()) return;

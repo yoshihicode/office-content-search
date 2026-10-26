@@ -13,7 +13,8 @@ Search text inside Word, Excel and PowerPoint files in a folder — and see exac
 - **Multiple keywords** — Separate keywords with spaces, use `"double quotes"` for phrases, and choose **Match any (OR)** or **Match all (AND)**.
 - **Forgiving matching** — Case-insensitive and full-width/half-width-insensitive (`ＡＢＣ` matches `abc`).
 - **Dates as displayed** — Excel date cells can be found by the text shown in Excel, such as `10/21/2026` or `2026年10月21日`.
-- **Search form in the sidebar** — Enter keywords, choose a folder, and include subfolders in one place. You can cancel a running search.
+- **Search form in the sidebar** — Enter keywords, choose a folder and the file types (Excel, Word, PowerPoint) in one place. You can cancel a running search.
+- **Safe with macro-enabled files** — `.xlsm`, `.docm` and `.pptm` files are searched without running their macros.
 - **Highlighted results** — Matches are highlighted in the results tree. Click a result to open the file in its default application.
 - **Copy file names and paths** — From the context menu, or with `Ctrl+C` / `Ctrl+Alt+C` (`Cmd` on macOS) in the results view.
 - **Results as text** — Open the list of results in an editor tab to read, save or share.
@@ -24,10 +25,10 @@ Search text inside Word, Excel and PowerPoint files in a folder — and see exac
 
 | Format | Searched content |
 | --- | --- |
-| Word (`.docx`) | Body paragraphs and tables, text boxes, headers and footers, footnotes, endnotes, comments, charts, SmartArt |
-| Excel (`.xlsx`) | Cell values, shapes and text boxes, charts (titles, axis titles, series names), chart sheets, SmartArt |
+| Word (`.docx`, `.docm`) | Body paragraphs and tables, text boxes, headers and footers, footnotes, endnotes, comments, charts, SmartArt |
+| Excel (`.xlsx`, `.xlsm`) | Cell values, shapes and text boxes, charts (titles, axis titles, series names), chart sheets, SmartArt |
 | Excel 97-2003 (`.xls`) | Cell values (text in shapes and charts is not searched) |
-| PowerPoint (`.pptx`) | Slide text and tables, speaker notes, charts, SmartArt |
+| PowerPoint (`.pptx`, `.pptm`) | Slide text and tables, speaker notes, charts, SmartArt |
 
 Excel cells are matched as follows (the same for `.xlsx` and `.xls`):
 
@@ -37,11 +38,11 @@ Excel cells are matched as follows (the same for `.xlsx` and `.xls`):
 ## Usage
 
 1. Click the **Office Search** icon in the Activity Bar.
-2. Enter keywords.
+2. Enter keywords, e.g. `invoice 2026 "project plan"`.
 3. Choose **Match any (OR)** or **Match all (AND)**. AND means the *file* contains every keyword (not necessarily in the same cell or paragraph).
 4. Enter a folder or click **Browse...**, and select **Include subfolders** if needed.
-5. Optionally select **Also open the results as text**.
-6. Select the **File types** to search (`.xls`, `.xlsx`, `.docx`, `.pptx`).
+5. Select the **File types** to search: Excel, Word and/or PowerPoint.
+6. Optionally select **Also open the results as text**.
 7. Click **Search**.
 
 You can also right-click a folder in the Explorer and select **Search Office Files in This Folder**.
