@@ -2,7 +2,11 @@
 
 [日本語](README.ja.md)
 
-Search text inside Word, Excel and PowerPoint files in a folder — and see exactly **where** it appears.
+Search text inside Word, Excel and PowerPoint files in a folder — and see exactly **where** it appears.  
+
+[Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=yoshihicode.office-content-search)  
+[Open VSX Registry](https://open-vsx.org/extension/yoshihicode/office-content-search)
+
 
 ![Searching Office files and viewing the results](images/screenshot.gif)
 

@@ -2,7 +2,10 @@
 
 [English](README.md)
 
-フォルダ内の Word・Excel・PowerPoint ファイルの中身を検索し、キーワードが**どこに**あるかまで表示する VS Code 拡張機能です。
+フォルダ内の Word・Excel・PowerPoint ファイルの中身を検索し、キーワードが**どこに**あるかまで表示する VS Code 拡張機能です。  
+
+[Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=yoshihicode.office-content-search)  
+[Open VSX Registry](https://open-vsx.org/extension/yoshihicode/office-content-search)
 
 ![Office ファイルを検索して結果を表示している画面](images/screenshot.gif)
 
